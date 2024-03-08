@@ -8,7 +8,7 @@ class loginController {
       const { email, password } = req.body;
       const response = await login.getLogin(email, password);
       if (response === 'error invalid') {
-        return res.status(401).json({ message: ' Invalid email or password' });
+        return res.status(401).json({ message: 'Invalid email or password' });
       }
       const code = jwt(response);
       res.status(200).json({ token: code });
