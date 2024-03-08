@@ -13,7 +13,8 @@
     "start": "node ./build/server.js",
     "predev": "npm run db:reset",
     "dev": "tsnd --watch \"./src/**\" --transpile-only ./src/server.ts",
-    "lint": "eslint ./src --ext .ts"
+    "lint": "eslint ./src --ext .ts",
+    "list-routes": "node -e \"require('express-list-endpoints')('./src/app.ts')\""
   },
   "keywords": [],
   "author": "",
@@ -41,6 +42,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-mocha": "9.0.0",
     "eslint-plugin-sonarjs": "0.10.0",
+    "express-list-endpoints": "^6.0.0",
     "mocha": "9.2.1",
     "nodemon": "2.0.15",
     "nyc": "15.1.0",
@@ -53,7 +55,7 @@
   "dependencies": {
     "bcryptjs": "2.4.3",
     "cors": "2.8.5",
-    "express": "4.17.1",
+    "express": "^4.17.1",
     "express-async-errors": "3.1.1",
     "jest": "27.4.3",
     "joi": "17.9.2",
