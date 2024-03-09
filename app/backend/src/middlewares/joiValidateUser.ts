@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import Joi = require('joi');
 
 const loginSchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 });
 
