@@ -6,7 +6,7 @@ class matchesController {
     try {
       const { inProgress } = req.query;
       if (inProgress === 'true' || inProgress === 'false') {
-        const progress = await matches.progress(inProgress);
+        const progress = await matches.getMatchesInProgress(inProgress);
         return res.status(200).json(progress);
       }
       const teams = await matches.getAllMatches();
@@ -20,7 +20,7 @@ class matchesController {
     try {
       const { id } = req.params;
       const { homeTeamGoals, awayTeamGoals } = req.body;
-      const response = await matches.getOneMatches(Number(id), homeTeamGoals, awayTeamGoals);
+      const response = await matches.updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
       if (response === false) {
         res.status(400).json({ message: 'Match not found or is not in progress' });
       }
@@ -33,7 +33,7 @@ class matchesController {
   static async getOneMatchesFinish(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const response = await matches.getOneMatchesFinish(Number(id));
+      const response = await matches.finishMatch(Number(id));
       if (response === 'partida não encontrada') {
         return res.status(400).json({ message: 'Match not found' });
       }

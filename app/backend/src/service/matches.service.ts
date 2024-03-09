@@ -1,47 +1,50 @@
-import MatchesModel from '../database/models/matches.model';
-import teamModel from '../database/models/team.model';
+import Match from '../database/models/matches.model';
+import Team from '../database/models/team.model';
 
-class matchesServices {
+class MatchesServices {
   static async getAllMatches() {
-    const pesquisa = {};
-    const matches = await MatchesModel.findAll({
-      where: pesquisa,
+    const matches = await Match.findAll({
       include: [
-        { model: teamModel, as: 'teamHome', attributes: ['teamName'] },
-        { model: teamModel, as: 'teamAway', attributes: ['teamName'] },
+        { model: Team, as: 'homeTeam' },
+        { model: Team, as: 'awayTeam' },
       ],
     });
     return matches;
   }
 
-  static async getOneMatches(id: number, home: number, away: number) {
-    const matches = await MatchesModel.findByPk(id);
+  static async updateMatch(id: number, homeTeamGoals: number, awayTeamGoals: number) {
+    const matches = await Match.findByPk(id);
     if (!matches || !matches.inProgress) {
       return false;
     }
 
-    matches.homeTeamGoals = home;
-    matches.awayTeamGoals = away;
+    matches.homeTeamGoals = homeTeamGoals;
+    matches.awayTeamGoals = awayTeamGoals;
     await matches.save();
+    return true;
   }
 
-  static async progress(inProgress: string) {
-    const matches = await MatchesModel.findAll({ where: { inProgress },
+  static async getMatchesInProgress(progress: string) {
+    console.log(progress);
+    const arruma = progress === 'true';
+    const matches = await Match.findAll({
+      where: { inProgress: arruma },
       include: [
-        { model: teamModel, as: 'teamHome', attributes: ['teamName'] },
-        { model: teamModel, as: 'teamAway', attributes: ['teamName'] },
-      ] });
+        { model: Team, as: 'homeTeam' },
+        { model: Team, as: 'awayTeam' },
+      ],
+    });
     return matches;
   }
 
-  static async getOneMatchesFinish(id: number): Promise<void | string> {
-    const matches = await MatchesModel.findByPk(id);
+  static async finishMatch(id: number): Promise<string | void> {
+    const matches = await Match.findByPk(id);
     if (!matches) {
-      return 'partida não encontrada';
+      return 'Partida não encontrada';
     }
     matches.inProgress = false;
     await matches.save();
   }
 }
 
-export default matchesServices;
+export default MatchesServices;
