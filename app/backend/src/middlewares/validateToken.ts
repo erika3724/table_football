@@ -9,6 +9,9 @@ const validateToken = async (req: Request, res: Response, next: NextFunction) =>
     return res.status(401).json({ message: 'Token not found' });
   }
   const decodedToken = jwt.verify(token, secretKey) as string;
+  if (!decodedToken) {
+    return res.status(401).json({ message: 'Token must be a valid token' });
+  }
   const response = await UserModel.findByPk(decodedToken);
   if (!response) {
     return res.status(401).json({ message: 'Token must be a valid token' });
