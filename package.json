@@ -8,7 +8,6 @@
     "install:back": "cd ./app/backend && npm install",
     "install:apps": "npm run install:front && npm run install:back",
     "test": "env $(cat ./app/backend/.env) jest -i --forceExit --verbose",
-    "testar": "for /f %i in (./app/backend/.env) do set %i && jest -i --forceExit --verbose",
     "test:browser": "SHOW_BROWSER=true npm test",
     "test:debug": "DEBUG=true npm test",
     "compose:up": "cd app && docker-compose up -d --build",
