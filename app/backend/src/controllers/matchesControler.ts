@@ -22,9 +22,9 @@ class matchesController {
       const { homeTeamGoals, awayTeamGoals } = req.body;
       const response = await matches.updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
       if (response === false) {
-        res.status(400).json({ message: 'Match not found or is not in progress' });
+        return res.status(400).json({ message: 'Match not found or is not in progress' });
       }
-      res.status(200).send();
+      return res.status(200).json({ message: response });
     } catch (error) {
       res.status(500).json({ error });
     }
@@ -37,7 +37,18 @@ class matchesController {
       if (response === 'partida não encontrada') {
         return res.status(400).json({ message: 'Match not found' });
       }
-      res.status(200).json({ message: 'Finished' });
+      return res.status(200).json({ message: 'Finished' });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  }
+
+  static async creatMatches(req: Request, res: Response) {
+    try {
+      const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+      const response = await matches
+        .creatMatch(Number(homeTeamId), Number(awayTeamId), homeTeamGoals, awayTeamGoals);
+      return res.status(201).json(response);
     } catch (error) {
       res.status(500).json({ error });
     }

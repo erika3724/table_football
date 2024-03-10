@@ -5,12 +5,9 @@ import login from '../service/login.service';
 class loginController {
   static async getoLogin(req: Request, res: Response) {
     try {
-      const { email, password } = req.body;
-      const response = await login.getLogin(email, password);
-      if (response === 'error invalid') {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
-      const code = jwt(response);
+      const { email } = req.body;
+      const response = await login.getLogin(email);
+      const code = jwt(response as string);
       res.status(200).json({ token: code });
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });

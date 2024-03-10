@@ -13,19 +13,23 @@ class MatchesServices {
   }
 
   static async updateMatch(id: number, homeTeamGoals: number, awayTeamGoals: number) {
-    const matches = await Match.findByPk(id);
-    if (!matches || !matches.inProgress) {
+    const matches = await Match.update(
+      { homeTeamGoals, awayTeamGoals },
+      {
+        where: {
+          id,
+          inProgress: true,
+        },
+      },
+    );
+    if (matches[0] === 0) {
       return false;
     }
 
-    matches.homeTeamGoals = homeTeamGoals;
-    matches.awayTeamGoals = awayTeamGoals;
-    await matches.save();
-    return true;
+    return matches;
   }
 
   static async getMatchesInProgress(progress: string) {
-    console.log(progress);
     const arruma = progress === 'true';
     const matches = await Match.findAll({
       where: { inProgress: arruma },
@@ -44,6 +48,22 @@ class MatchesServices {
     }
     matches.inProgress = false;
     await matches.save();
+  }
+
+  static async creatMatch(
+    homeTeamId:number,
+    awayTeamId:number,
+    homeTeamGoals:number,
+    awayTeamGoals:number,
+  ) {
+    const matches = await Match.create({
+      homeTeamId,
+      homeTeamGoals,
+      awayTeamId,
+      awayTeamGoals,
+      inProgress: true,
+    });
+    return matches;
   }
 }
 
