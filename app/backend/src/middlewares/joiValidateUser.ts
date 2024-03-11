@@ -9,9 +9,9 @@ const loginSchema = Joi.object({
 });
 
 const validate = async (req : Request, res: Response, next: NextFunction) => {
-  const { error } = loginSchema.validate(req.body);
+  const { error } = await loginSchema.validate(req.body);
   const emailRegex = /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/;
-  const a = emailRegex.test(req.body.email);
+  const a = await emailRegex.test(req.body.email);
   if (error) {
     return res.status(400).json({ message: 'All fields must be filled' });
   }
